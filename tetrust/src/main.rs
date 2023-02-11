@@ -1,3 +1,8 @@
+struct Position {
+    x: usize,
+    y: usize,
+}
+
 fn main() {
     let minos = [
         // Iミノ
@@ -39,28 +44,29 @@ fn main() {
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    // 描画用フィールドの生成
-    let mut field_buf = field;
-    // 描画用フィールドにテトリミノの情報を書き込む
-    for y in 0..4 {
-        for x in 0..4 {
-            field_buf[y + 2][x + 2] |= minos[0][y][x]; // I
-            field_buf[y + 2][x + 7] |= minos[1][y][x]; // O
-            field_buf[y + 6][x + 2] |= minos[2][y][x]; // S
-            field_buf[y + 6][x + 7] |= minos[3][y][x]; // Z
-            field_buf[y + 10][x + 2] |= minos[4][y][x]; // J
-            field_buf[y + 10][x + 7] |= minos[5][y][x]; // L
-            field_buf[y + 14][x + 2] |= minos[6][y][x]; // T
-        }
-    }
-    for y in 0..22 {
-        for x in 0..12 {
-            if field_buf[y][x] == 1 {
-                print!("[]")
-            } else {
-                print!(" .")
+    let mut pos = Position { x: 4, y: 0 };
+    // 5マス分落下させてみる
+    for _ in 0..5 {
+        // 描画用フィールドを初期化
+        let mut field_buf = field;
+        // 描画用フィールドにテトリミノの情報を書き込む
+        for y in 0..4 {
+            for x in 0..4 {
+                field_buf[y + pos.y + 1][x + pos.x] |= minos[0][y][x]; // I
             }
         }
-        println!();
+        // posのy座標を更新
+        pos.y += 1;
+        // フィールドを描画
+        for y in 0..22 {
+            for x in 0..12 {
+                if field_buf[y][x] == 1 {
+                    print!("[]");
+                } else {
+                    print!(" .");
+                }
+            }
+            println!();
+        }
     }
 }
