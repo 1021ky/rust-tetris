@@ -1,3 +1,5 @@
+use std::{thread, time};
+
 struct Position {
     x: usize,
     y: usize,
@@ -71,6 +73,8 @@ fn main() {
             }
             println!();
         }
+        // 落下速度を調整するために1秒間スリーブする
+        thread::sleep(time::Duration::from_millis(1000));
     }
     // カーソルを再表示
     println!("\x1b[?25h");
