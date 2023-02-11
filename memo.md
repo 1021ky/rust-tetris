@@ -11,10 +11,12 @@ let mut field_buf = field;
 
 ## 知らなかったことメモ
 
-[継承(Derive)](https://doc.rust-jp.rs/rust-by-example-ja/trait/derive.html)
-pythonでいうアノテーションのように、対象の上の行に書く。
+### [継承(Derive)](https://doc.rust-jp.rs/rust-by-example-ja/trait/derive.html)
+
+継承はpythonでいうアノテーションのように、対象の上の行に書く。
 つけるだけで意味がある場合と、実装してオーバーライドする場合がある。
 
+以下サンプルは[継承(Derive)](https://doc.rust-jp.rs/rust-by-example-ja/trait/derive.html)より
 ```rust
 // `Centimeters`, a tuple struct that can be compared
 // `Centimeters`は比較可能なタプルになる
@@ -33,4 +35,13 @@ impl Inches {
         Centimeters(inches as f64 * 2.54)
     }
 }
+```
+
+### 依存ライブラリの追加方法
+
+pipenvやpoetoryのようにサブコマンドでできる。
+サブコマンドはadd。
+
+```bash
+cargo add getch-rs
 ```
