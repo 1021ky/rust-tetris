@@ -33,7 +33,7 @@ const MINOS: [[[usize; 4]; 4]; 7] = [
 fn is_collision(field: &[[usize; 12]], pos: &Position, mino: MinoKind) -> bool {
     for y in 0..4 {
         for x in 0..4 {
-            if field[y + pos.y + 1][x + pos.x] & MINOS[mino as usize][y][x] == 1 {
+            if field[y + pos.y][x + pos.x] & MINOS[mino as usize][y][x] == 1 {
                 return true;
             }
         }
@@ -81,6 +81,15 @@ fn main() {
         if !is_collision(&field, &pos, MinoKind::I) {
             // posのy座標を更新
             pos.y += 1;
+            // 自然落下
+            let new_pos = Position {
+                x: pos.x,
+                y: pos.y + 1,
+            };
+            if !is_collision(&field, &new_pos, MinoKind::I) {
+                // posの座標を更新
+                pos = new_pos;
+            }
         }
         // 描画用フィールドにテトリミノの情報を書き込む
         for y in 0..4 {
@@ -102,8 +111,38 @@ fn main() {
         }
         // 落下速度を調整するために1秒間スリーブする
         thread::sleep(time::Duration::from_millis(1000));
-        // `q`キーでループを抜ける
+        // キー入力待ち
         match g.getch() {
+            Ok(Key::Left) => {
+                let new_pos = Position {
+                    x: pos.x - 1,
+                    y: pos.y,
+                };
+                if !is_collision(&field, &new_pos, MinoKind::I) {
+                    // posの座標を更新
+                    pos = new_pos;
+                }
+            }
+            Ok(Key::Down) => {
+                let new_pos = Position {
+                    x: pos.x,
+                    y: pos.y + 1,
+                };
+                if !is_collision(&field, &new_pos, MinoKind::I) {
+                    // posの座標を更新
+                    pos = new_pos;
+                }
+            }
+            Ok(Key::Right) => {
+                let new_pos = Position {
+                    x: pos.x + 1,
+                    y: pos.y,
+                };
+                if !is_collision(&field, &new_pos, MinoKind::I) {
+                    // posの座標を更新
+                    pos = new_pos;
+                }
+            }
             Ok(Key::Char('q')) => break,
             _ => (), // 何もしない
         }
